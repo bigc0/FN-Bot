@@ -120,19 +120,26 @@ device_auth_details = get_device_auth_details().get(data['email'], {})
 
 prefix = '!'
 
-client = commands.Bot(
-    command_prefix=prefix,
-    case_insensitive=True,
-    auth=fortnitepy.AdvancedAuth(
-        email=data['email'],
-        password=data['password'],
-        prompt_authorization_code=True,
-        delete_existing_device_auths=True,
-        **device_auth_details
+async def start_bot():
+    client = commands.Bot(
+        command_prefix=prefix,
+        case_insensitive=True,
+        auth=fortnitepy.AdvancedAuth(
+            email=data['email'],
+            password=data['password'],
+            prompt_authorization_code=True,
+            delete_existing_device_auths=True,
+            **device_auth_details
     ),
     status=data['status'],
     platform=fortnitepy.Platform(data['platform']),
 )
+
+    await client.start()
+
+if __name__ == "__main__":
+    asyncio.run(start_bot())
+
 client.party_build_id = "1:3:" # Fix for error code 91 and 93
 
 @client.event
